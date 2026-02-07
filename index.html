@@ -24,4 +24,365 @@ body{
   background:rgba(255,255,255,0.95);
   padding:35px 25px;
   border-radius:20px;
-  box-
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  max-width:420px;
+  width:90%;
+  position:relative;
+  z-index:2;
+}
+
+h1{color:#ff4b5c}
+
+#countdown{
+  font-size:20px;
+  font-weight:bold;
+  margin:15px 0;
+}
+
+/* BUTTON */
+
+button{
+  padding:12px 22px;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#surpriseBtn{
+  background:#ff4b5c;
+  color:white;
+}
+
+#surpriseBtn:hover{
+  transform:scale(1.1);
+}
+
+/* PHOTO */
+
+#photoFrame{
+  margin:15px auto;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid #ff4b5c;
+  box-shadow:0 0 15px rgba(255,75,92,0.5);
+  display:none;
+}
+
+#photoFrame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* PROPOSAL */
+
+#proposal{
+  font-size:26px;
+  margin-top:20px;
+  display:none;
+}
+
+/* BIG YES / HELL BUTTONS */
+
+.choice{
+  position:fixed;
+  bottom:-100px;
+  padding:20px 40px;       /* Bigger size */
+  font-size:26px;         /* Bigger text */
+  border-radius:40px;
+  color:white;
+  z-index:3;
+  box-shadow:0 6px 15px rgba(0,0,0,0.25);
+  transition:0.3s;
+}
+
+.choice:hover{
+  transform:scale(1.1);
+}
+
+#yesBtn{
+  left:20px;
+  background:#ff5fa2;
+}
+
+#hellBtn{
+  right:20px;
+  background:#ff914d;
+}
+
+/* BALLOONS */
+
+.balloon{
+  position:fixed;
+  bottom:-80px;
+  font-size:50px;
+  animation:floatUp 10s linear infinite;
+  opacity:0.8;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-120vh)}
+}
+
+/* CONFETTI */
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Hello My Dear Mishti ❤️</h1>
+
+<p id="countdown"></p>
+
+<button id="surpriseBtn" onclick="showSurprise()">
+I have been thinking to ask you a question 💝
+</button>
+
+<!-- PHOTO -->
+
+<div id="photoFrame">
+<img src="mishti.jpg" alt="My Love ❤️">
+</div>
+
+<!-- PROPOSAL -->
+
+<div id="proposal">
+💕 Will You Be My Valentine? 💕
+</div>
+
+</div>
+
+<!-- CHOICE BUTTONS -->
+
+<button id="yesBtn" class="choice" onclick="acceptLove()">
+Yes 💖
+</button>
+
+<button id="hellBtn" class="choice" onclick="acceptLove()">
+Hell Yeah 😍
+</button>
+
+<canvas id="confetti"></canvas>
+
+<script>
+
+// DATE
+
+const valentinesDay = new Date("Feb 14, 2026 00:00:00").getTime();
+const countdownEl = document.getElementById("countdown");
+
+setInterval(()=>{
+
+  const now = Date.now();
+  const diff = valentinesDay-now;
+
+  if(diff<=0){
+    countdownEl.innerHTML="It's Time ❤️";
+    return;
+  }
+
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor(diff/3600000)%24;
+  const m=Math.floor(diff/60000)%60;
+  const s=Math.floor(diff/1000)%60;
+
+  countdownEl.innerHTML= `${d}d ${h}h ${m}m ${s}s 💖`;
+
+},1000);
+
+
+// MUSIC
+
+const loveSong = new Audio("love-song.mp3");
+loveSong.loop = true;
+
+
+// SURPRISE
+
+function showSurprise(){
+
+  document.getElementById("proposal").style.display="block";
+  document.getElementById("photoFrame").style.display="block";
+
+  showButtons();
+
+  launchConfetti(150);
+  launchBalloons();
+
+}
+
+
+// BUTTONS
+
+function showButtons(){
+
+  document.getElementById("yesBtn").style.bottom="20px";
+  document.getElementById("hellBtn").style.bottom="20px";
+
+}
+
+
+function acceptLove(){
+
+  loveSong.play();
+
+  launchConfetti(600);
+
+  document.getElementById("proposal").innerHTML =
+  "💍 I Love You Mishti! ♾️❤️🥰";
+
+  document.getElementById("yesBtn").style.display="none";
+  document.getElementById("hellBtn").style.display="none";
+
+}
+
+
+// CONFETTI
+
+function launchConfetti(count){
+
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+
+  let pieces=[];
+
+  const shapes=["circle","heart","star"];
+
+  for(let i=0;i<count;i++){
+
+    pieces.push({
+
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*6+4,
+      c:`hsl(${Math.random()*360},100%,60%)`,
+      s:Math.random()*4+2,
+      shape:shapes[Math.floor(Math.random()*3)]
+
+    });
+
+  }
+
+  let frames=0;
+
+  function draw(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    pieces.forEach(p=>{
+
+      ctx.fillStyle=p.c;
+      ctx.beginPath();
+
+      if(p.shape==="circle"){
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      }
+
+      else if(p.shape==="heart"){
+
+        ctx.moveTo(p.x,p.y);
+
+        ctx.bezierCurveTo(
+          p.x-5,p.y-5,
+          p.x-15,p.y+10,
+          p.x,p.y+20
+        );
+
+        ctx.bezierCurveTo(
+          p.x+15,p.y+10,
+          p.x+5,p.y-5,
+          p.x,p.y
+        );
+
+      }
+
+      else{
+
+        for(let i=0;i<5;i++){
+
+          ctx.lineTo(
+            p.x+Math.cos((18+i*72)*Math.PI/180)*p.r,
+            p.y-Math.sin((18+i*72)*Math.PI/180)*p.r
+          );
+
+          ctx.lineTo(
+            p.x+Math.cos((54+i*72)*Math.PI/180)*(p.r/2),
+            p.y-Math.sin((54+i*72)*Math.PI/180)*(p.r/2)
+          );
+
+        }
+
+      }
+
+      ctx.fill();
+
+      p.y+=p.s;
+      p.x+=Math.sin(p.y*0.01);
+
+      if(p.y>canvas.height) p.y=0;
+
+    });
+
+    frames++;
+
+    if(frames<500){
+      requestAnimationFrame(draw);
+    }
+    else{
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+
+  }
+
+  draw();
+
+}
+
+
+// BALLOONS
+
+function launchBalloons(){
+
+  for(let i=0;i<12;i++){
+
+    const b=document.createElement("div");
+
+    b.className="balloon";
+    b.innerHTML="🎈";
+
+    b.style.left=Math.random()*100+"%";
+    b.style.animationDuration=8+Math.random()*6+"s";
+
+    document.body.appendChild(b);
+
+    setTimeout(()=>{
+      b.remove();
+    },14000);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
