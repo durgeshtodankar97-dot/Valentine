@@ -18,6 +18,8 @@ body{
   overflow:hidden;
 }
 
+/* MAIN CARD */
+
 .card{
   background:rgba(255,255,255,0.95);
   padding:35px 25px;
@@ -37,6 +39,8 @@ h1{color:#ff4b5c}
   margin:15px 0;
 }
 
+/* BUTTONS */
+
 button{
   padding:12px 22px;
   font-size:18px;
@@ -55,13 +59,34 @@ button{
   transform:scale(1.1);
 }
 
+/* PHOTO FRAME */
+
+#photoFrame{
+  margin:15px auto;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid #ff4b5c;
+  box-shadow:0 0 15px rgba(255,75,92,0.5);
+  display:none;
+}
+
+#photoFrame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* PROPOSAL */
+
 #proposal{
   font-size:26px;
   margin-top:20px;
   display:none;
 }
 
-/* YES / HELL YEAH BUTTONS */
+/* YES / HELL BUTTONS */
 
 .choice{
   position:fixed;
@@ -98,7 +123,7 @@ button{
   100%{transform:translateY(-120vh)}
 }
 
-/* CANVAS */
+/* CONFETTI CANVAS */
 
 canvas{
   position:fixed;
@@ -120,14 +145,25 @@ canvas{
 <p id="countdown"></p>
 
 <button id="surpriseBtn" onclick="showSurprise()">
-Click for a Surprise 💝
+I have been thinking to ask you a question 💝
 </button>
+
+
+<!-- PHOTO -->
+
+<div id="photoFrame">
+  <img src="mishti.jpg" alt="My Love ❤️">
+</div>
+
+
+<!-- PROPOSAL -->
 
 <div id="proposal">
 💕 Will You Be My Valentine? 💕
 </div>
 
 </div>
+
 
 <!-- CHOICE BUTTONS -->
 
@@ -138,6 +174,7 @@ Yes 💖
 <button id="hellBtn" class="choice" onclick="acceptLove()">
 Hell Yeah 😍
 </button>
+
 
 <canvas id="confetti"></canvas>
 
@@ -172,6 +209,13 @@ countdownEl.innerHTML=
 
 },1000);
 
+
+//////////// MUSIC ///////////////////
+
+const loveSong = new Audio("love-song.mp3");
+loveSong.loop = true;
+
+
 //////////// SURPRISE ///////////////////
 
 function showSurprise(){
@@ -179,13 +223,17 @@ function showSurprise(){
 document.getElementById("proposal")
 .style.display="block";
 
+document.getElementById("photoFrame")
+.style.display="block";
+
 showButtons();
 
-launchConfetti(200);
+launchConfetti(150);
 
 launchBalloons();
 
 }
+
 
 //////////// BUTTONS ///////////////////
 
@@ -199,14 +247,25 @@ document.getElementById("hellBtn")
 
 }
 
+
 function acceptLove(){
 
-launchConfetti(500);
+// Start music
+loveSong.play();
+
+// Big celebration
+launchConfetti(600);
 
 document.getElementById("proposal")
 .innerHTML="💍 I Love You Forever ❤️🥰";
 
+// Hide buttons
+document.getElementById("yesBtn").style.display="none";
+document.getElementById("hellBtn").style.display="none";
+
 }
+
+
 
 //////////// CONFETTI ///////////////////
 
@@ -277,7 +336,6 @@ p.x,p.y
 
 else{
 
-// STAR
 for(let i=0;i<5;i++){
 
 ctx.lineTo(
@@ -305,7 +363,7 @@ if(p.y>canvas.height)p.y=0;
 
 frames++;
 
-if(frames<350){
+if(frames<500){
 requestAnimationFrame(draw);
 }
 else{
@@ -319,11 +377,13 @@ draw();
 
 }
 
+
+
 //////////// BALLOONS ///////////////////
 
 function launchBalloons(){
 
-for(let i=0;i<10;i++){
+for(let i=0;i<12;i++){
 
 const b=document.createElement("div");
 
